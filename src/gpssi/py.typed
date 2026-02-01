@@ -1,0 +1,27 @@
+"""Type stub for gpssi package."""
+
+from typing import Literal
+
+import numpy as np
+from numpy.typing import NDArray
+
+from gpssi.covariance import CovarianceRepresentation, FullCovariance, KroneckerCovariance
+from gpssi.geodesic import GeodesicMethod, get_geodesic_map
+from gpssi.gpssi import get_covariance, get_sample
+from gpssi.kernel import Kernel, RbfKernel
+
+__all__ = [
+    "get_sample",
+    "get_covariance",
+    "get_geodesic_map",
+    "CovarianceRepresentation",
+    "KroneckerCovariance",
+    "FullCovariance",
+    "Kernel",
+    "RbfKernel",
+    "GeodesicMethod",
+]
+
+__version__: str
+__author__: str
+__license__: str
