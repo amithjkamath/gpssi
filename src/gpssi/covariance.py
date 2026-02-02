@@ -58,9 +58,7 @@ class KroneckerCovariance(CovarianceRepresentation):
         cov_kron_mats: List of Cholesky factors for each dimension. Defaults to None.
     """
 
-    def __init__(
-        self, cov_kron_mats: Optional[list[NDArray[np.floating]]] = None
-    ) -> None:
+    def __init__(self, cov_kron_mats: Optional[list[NDArray[np.floating]]] = None) -> None:
         """Initialize Kronecker covariance representation."""
         self.cov_kron_mats = cov_kron_mats
 
@@ -180,9 +178,7 @@ def kronecker_grid_factorization(
     return kron_matrices
 
 
-def full_grid_factorization(
-    shape: tuple[int, ...], kernel: Kernel
-) -> NDArray[np.floating]:
+def full_grid_factorization(shape: tuple[int, ...], kernel: Kernel) -> NDArray[np.floating]:
     """Compute full covariance matrix for a grid.
 
     Args:

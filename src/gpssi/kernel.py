@@ -18,9 +18,7 @@ class Kernel(ABC):
     """
 
     @abstractmethod
-    def __call__(
-        self, x1: NDArray[np.floating], x2: NDArray[np.floating]
-    ) -> NDArray[np.floating]:
+    def __call__(self, x1: NDArray[np.floating], x2: NDArray[np.floating]) -> NDArray[np.floating]:
         """Compute kernel values between points.
 
         Args:
@@ -65,9 +63,7 @@ class RbfKernel(Kernel):
         self.w1 = w1
         self.eps = eps
 
-    def __call__(
-        self, x1: NDArray[np.floating], x2: NDArray[np.floating]
-    ) -> NDArray[np.floating]:
+    def __call__(self, x1: NDArray[np.floating], x2: NDArray[np.floating]) -> NDArray[np.floating]:
         """Compute RBF kernel matrix.
 
         Args:
