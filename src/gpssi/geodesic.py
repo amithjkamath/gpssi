@@ -7,7 +7,7 @@ replacing the GeodisTK library with scipy-based implementations.
 from __future__ import annotations
 
 from enum import Enum
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union, cast
 
 import numpy as np
 from scipy import ndimage
@@ -130,7 +130,9 @@ def _euclidean_distance(
     Returns:
         Euclidean distance transform.
     """
-    return ndimage.distance_transform_edt(~mask, sampling=spacing)
+    return cast(
+        "NDArray[np.floating]", ndimage.distance_transform_edt(~mask, sampling=spacing)
+    )
 
 
 def _geodesic_raster_scan(
@@ -346,4 +348,4 @@ def _fast_marching_geodesic(
     geodesic_dist = euc_dist / speed
     geodesic_dist[seed_mask] = 0.0
 
-    return geodesic_dist
+    return cast("NDArray[np.floating]", geodesic_dist)

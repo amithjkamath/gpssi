@@ -37,6 +37,7 @@ def get_covariance(
         >>> kernel = RbfKernel(w0=1.0, w1=5.0, eps=1e-8)
         >>> cov = get_covariance((100, 100), kernel, cov_repr="kron")
     """
+    cov: c.CovarianceRepresentation
     if cov_repr == "kron":
         cov = c.KroneckerCovariance()
     elif cov_repr == "full":

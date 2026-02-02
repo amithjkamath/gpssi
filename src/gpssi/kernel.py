@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, cast
 
 import numpy as np
 
@@ -122,4 +122,4 @@ def rbf(
     if diag_eps is not None and result.shape[0] == result.shape[1]:
         result += np.eye(result.shape[0]) * diag_eps
 
-    return result
+    return cast("NDArray[np.floating]", result)

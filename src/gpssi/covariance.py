@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, cast
 
 import numpy as np
 from scipy import linalg
@@ -175,7 +175,7 @@ def kronecker_grid_factorization(
     for d in range(len(shape)):
         pos_d = np.arange(shape[d])[:, np.newaxis].astype(np.float64)
         cov_d = kernel(pos_d, pos_d)
-        u_d = linalg.cholesky(cov_d, lower=False)
+        u_d = cast("NDArray[np.floating]", linalg.cholesky(cov_d, lower=False))
         kron_matrices.append(u_d)
     return kron_matrices
 
@@ -196,4 +196,4 @@ def full_grid_factorization(
     pos = np.indices(shape).transpose((*tuple(range(1, ndim + 1)), 0))
     pos_vec = pos.reshape(-1, ndim).astype(np.float64)
     cov = kernel(pos_vec, pos_vec)
-    return linalg.cholesky(cov, lower=False)
+    return cast("NDArray[np.floating]", linalg.cholesky(cov, lower=False))

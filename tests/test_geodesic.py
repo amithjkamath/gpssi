@@ -114,12 +114,8 @@ class TestGeodesicMap:
         seg = np.zeros((30, 30), dtype=np.uint8)
         seg[10:20, 10:20] = 1  # Square crossing the edge
 
-        geo_low = get_geodesic_map(
-            img, seg, lmbda=0.1, method=GeodesicMethod.FAST_MARCHING
-        )
-        geo_high = get_geodesic_map(
-            img, seg, lmbda=0.9, method=GeodesicMethod.FAST_MARCHING
-        )
+        geo_low = get_geodesic_map(img, seg, lmbda=0.1, method=GeodesicMethod.FAST_MARCHING)
+        geo_high = get_geodesic_map(img, seg, lmbda=0.9, method=GeodesicMethod.FAST_MARCHING)
 
         # With different lambda on a gradient image, results should differ
         # The high lambda gives more weight to image gradient
@@ -192,12 +188,8 @@ class TestRasterScan:
         seed[10, 10] = True
         spacing = np.array([1.0, 1.0])
 
-        dist_1 = _geodesic_raster_scan(
-            img, seed, lmbda=0.0, iterations=1, spacing=spacing
-        )
-        dist_4 = _geodesic_raster_scan(
-            img, seed, lmbda=0.0, iterations=4, spacing=spacing
-        )
+        dist_1 = _geodesic_raster_scan(img, seed, lmbda=0.0, iterations=1, spacing=spacing)
+        dist_4 = _geodesic_raster_scan(img, seed, lmbda=0.0, iterations=4, spacing=spacing)
 
         # With more iterations, distances should be more accurate (generally smaller)
         # for points far from seed
@@ -217,9 +209,7 @@ class TestFastMarching:
         seed = np.zeros((15, 15), dtype=bool)
         seed[7, 7] = True
 
-        dist = _fast_marching_geodesic(
-            img, seed, lmbda=0.5, spacing=np.array([1.0, 1.0])
-        )
+        dist = _fast_marching_geodesic(img, seed, lmbda=0.5, spacing=np.array([1.0, 1.0]))
 
         assert dist.shape == (15, 15)
         assert dist[7, 7] == 0.0

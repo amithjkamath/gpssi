@@ -200,9 +200,7 @@ class TestGeodesicBenchmarks:
         seg = np.zeros((50, 50), dtype=np.uint8)
         seg[20:30, 20:30] = 1
 
-        result = benchmark(
-            get_geodesic_map, img, seg, lmbda=0.5, method=GeodesicMethod.EUCLIDEAN
-        )
+        result = benchmark(get_geodesic_map, img, seg, lmbda=0.5, method=GeodesicMethod.EUCLIDEAN)
 
         assert result.shape == img.shape
 
@@ -213,9 +211,7 @@ class TestGeodesicBenchmarks:
         seg = np.zeros((100, 100), dtype=np.uint8)
         seg[40:60, 40:60] = 1
 
-        result = benchmark(
-            get_geodesic_map, img, seg, lmbda=0.5, method=GeodesicMethod.EUCLIDEAN
-        )
+        result = benchmark(get_geodesic_map, img, seg, lmbda=0.5, method=GeodesicMethod.EUCLIDEAN)
 
         assert result.shape == img.shape
 
