@@ -78,11 +78,7 @@ def get_geodesic_map(
 
     # Find the boundary of the mask for computing signed distance
     # The boundary is where the mask meets non-mask regions
-    struct = (
-        np.ones((3, 3), dtype=bool)
-        if np_img.ndim == 2
-        else np.ones((3, 3, 3), dtype=bool)
-    )
+    struct = np.ones((3, 3), dtype=bool) if np_img.ndim == 2 else np.ones((3, 3, 3), dtype=bool)
 
     # Erode the mask - boundary pixels are those in mask but not in eroded mask
     eroded = ndimage.binary_erosion(mask, structure=struct)
@@ -97,12 +93,8 @@ def get_geodesic_map(
         np_geo[mask] = -dist_inside[mask]
     elif method == GeodesicMethod.RASTER_SCAN:
         # Geodesic distance using raster scan from boundary
-        dist_outside = _geodesic_raster_scan(
-            np_img, boundary, lmbda, iterations, spacing_arr
-        )
-        dist_inside = _geodesic_raster_scan(
-            np_img, boundary, lmbda, iterations, spacing_arr
-        )
+        dist_outside = _geodesic_raster_scan(np_img, boundary, lmbda, iterations, spacing_arr)
+        dist_inside = _geodesic_raster_scan(np_img, boundary, lmbda, iterations, spacing_arr)
         np_geo = dist_outside.copy()
         np_geo[mask] = -dist_inside[mask]
     elif method == GeodesicMethod.FAST_MARCHING:
@@ -130,9 +122,7 @@ def _euclidean_distance(
     Returns:
         Euclidean distance transform.
     """
-    return cast(
-        "NDArray[np.floating]", ndimage.distance_transform_edt(~mask, sampling=spacing)
-    )
+    return cast("NDArray[np.floating]", ndimage.distance_transform_edt(~mask, sampling=spacing))
 
 
 def _geodesic_raster_scan(
@@ -200,13 +190,9 @@ def _geodesic_raster_scan(
     # Raster scan iterations
     for _ in range(iterations):
         # Forward scan
-        dist = _raster_pass(
-            dist, img_normalized, offsets, spatial_dists, lmbda, forward=True
-        )
+        dist = _raster_pass(dist, img_normalized, offsets, spatial_dists, lmbda, forward=True)
         # Backward scan
-        dist = _raster_pass(
-            dist, img_normalized, offsets, spatial_dists, lmbda, forward=False
-        )
+        dist = _raster_pass(dist, img_normalized, offsets, spatial_dists, lmbda, forward=False)
 
     return dist
 
@@ -238,9 +224,7 @@ def _raster_pass(
     ndim = len(shape)
 
     # Determine iteration order
-    ranges = (
-        [range(s) for s in shape] if forward else [range(s - 1, -1, -1) for s in shape]
-    )
+    ranges = [range(s) for s in shape] if forward else [range(s - 1, -1, -1) for s in shape]
 
     # For 2D
     if ndim == 2:
@@ -259,9 +243,7 @@ def _raster_pass(
                         grad_dist = abs(current_val - neighbor_val)
 
                         # Combined distance: spatial + gradient-weighted
-                        edge_weight = (
-                            1 - lmbda
-                        ) * spatial_dist + lmbda * grad_dist * spatial_dist
+                        edge_weight = (1 - lmbda) * spatial_dist + lmbda * grad_dist * spatial_dist
                         new_dist = dist[ni, nj] + edge_weight
 
                         dist[i, j] = min(dist[i, j], new_dist)
@@ -279,11 +261,7 @@ def _raster_pass(
                         spatial_dist = spatial_dists[idx]
                         ni, nj, nk = i + offset[0], j + offset[1], k + offset[2]
 
-                        if (
-                            0 <= ni < shape[0]
-                            and 0 <= nj < shape[1]
-                            and 0 <= nk < shape[2]
-                        ):
+                        if 0 <= ni < shape[0] and 0 <= nj < shape[1] and 0 <= nk < shape[2]:
                             neighbor_val = img[ni, nj, nk]
                             grad_dist = abs(current_val - neighbor_val)
 
