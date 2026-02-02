@@ -3,6 +3,8 @@
 import numpy as np
 import pytest
 
+from gpssi.kernel import RbfKernel
+
 
 @pytest.fixture
 def rng():
@@ -41,8 +43,6 @@ def simple_3d_segmentation():
 @pytest.fixture
 def default_kernel():
     """Create a default RBF kernel for testing."""
-    from gpssi.kernel import RbfKernel
-
     return RbfKernel(w0=1.0, w1=5.0, eps=1e-8)
 
 

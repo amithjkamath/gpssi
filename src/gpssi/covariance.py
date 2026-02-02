@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, List, Optional, Tuple
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
-import scipy.linalg as linalg
+from scipy import linalg
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -22,7 +22,7 @@ class CovarianceRepresentation(ABC):
     """
 
     @abstractmethod
-    def factorize_grid(self, shape: Tuple[int, ...], kernel: Kernel) -> None:
+    def factorize_grid(self, shape: tuple[int, ...], kernel: Kernel) -> None:
         """Factorize covariance matrix for a regular grid.
 
         Args:
@@ -59,12 +59,12 @@ class KroneckerCovariance(CovarianceRepresentation):
     """
 
     def __init__(
-        self, cov_kron_mats: Optional[List[NDArray[np.floating]]] = None
+        self, cov_kron_mats: Optional[list[NDArray[np.floating]]] = None
     ) -> None:
         """Initialize Kronecker covariance representation."""
         self.cov_kron_mats = cov_kron_mats
 
-    def factorize_grid(self, shape: Tuple[int, ...], kernel: Kernel) -> None:
+    def factorize_grid(self, shape: tuple[int, ...], kernel: Kernel) -> None:
         """Compute Kronecker factorization for a grid.
 
         Args:
@@ -105,7 +105,7 @@ class FullCovariance(CovarianceRepresentation):
         """Initialize full covariance representation."""
         self.cov = cov
 
-    def factorize_grid(self, shape: Tuple[int, ...], kernel: Kernel) -> None:
+    def factorize_grid(self, shape: tuple[int, ...], kernel: Kernel) -> None:
         """Compute full covariance matrix and its Cholesky factor.
 
         Args:
@@ -133,7 +133,7 @@ class FullCovariance(CovarianceRepresentation):
 
 
 def kronecker_matrix_vector_product(
-    kron_matrices: List[NDArray[np.floating]], x: NDArray[np.floating]
+    kron_matrices: list[NDArray[np.floating]], x: NDArray[np.floating]
 ) -> NDArray[np.floating]:
     """Efficient Kronecker matrix-vector product.
 
@@ -160,8 +160,8 @@ def kronecker_matrix_vector_product(
 
 
 def kronecker_grid_factorization(
-    shape: Tuple[int, ...], kernel: Kernel
-) -> List[NDArray[np.floating]]:
+    shape: tuple[int, ...], kernel: Kernel
+) -> list[NDArray[np.floating]]:
     """Compute Kronecker factorization for a regular grid.
 
     Args:
@@ -181,7 +181,7 @@ def kronecker_grid_factorization(
 
 
 def full_grid_factorization(
-    shape: Tuple[int, ...], kernel: Kernel
+    shape: tuple[int, ...], kernel: Kernel
 ) -> NDArray[np.floating]:
     """Compute full covariance matrix for a grid.
 
@@ -193,7 +193,7 @@ def full_grid_factorization(
         Cholesky factor of the covariance matrix.
     """
     ndim = len(shape)
-    pos = np.indices(shape).transpose(tuple(range(1, ndim + 1)) + (0,))
+    pos = np.indices(shape).transpose((*tuple(range(1, ndim + 1)), 0))
     pos_vec = pos.reshape(-1, ndim).astype(np.float64)
     cov = kernel(pos_vec, pos_vec)
     return linalg.cholesky(cov, lower=False)

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import numpy as np
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 def get_covariance(
-    img_shape: Tuple[int, ...],
+    img_shape: tuple[int, ...],
     kernel: k.Kernel,
     cov_repr: str = "kron",
 ) -> c.CovarianceRepresentation:
@@ -55,7 +55,7 @@ def get_sample(
     noise_vec: Optional[NDArray[np.floating]] = None,
     *,
     return_geo_sample: bool = False,
-) -> Union[NDArray[np.bool_], Tuple[NDArray[np.bool_], NDArray[np.floating]]]:
+) -> Union[NDArray[np.bool_], tuple[NDArray[np.bool_], NDArray[np.floating]]]:
     """Generate a sample segmentation from geodesic map and covariance.
 
     Takes a geodesic distance map and adds spatially correlated noise

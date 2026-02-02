@@ -7,7 +7,7 @@ replacing the GeodisTK library with scipy-based implementations.
 from __future__ import annotations
 
 from enum import Enum
-from typing import TYPE_CHECKING, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import numpy as np
 from scipy import ndimage
@@ -29,7 +29,7 @@ def get_geodesic_map(
     np_seg: Union[NDArray[np.integer], NDArray[np.bool_]],
     lmbda: float = 0.9,
     iterations: Optional[int] = None,
-    spacing: Optional[Tuple[float, ...]] = None,
+    spacing: Optional[tuple[float, ...]] = None,
     *,
     method: GeodesicMethod = GeodesicMethod.RASTER_SCAN,
 ) -> NDArray[np.floating]:
@@ -78,10 +78,11 @@ def get_geodesic_map(
 
     # Find the boundary of the mask for computing signed distance
     # The boundary is where the mask meets non-mask regions
-    if np_img.ndim == 2:
-        struct = np.ones((3, 3), dtype=bool)
-    else:
-        struct = np.ones((3, 3, 3), dtype=bool)
+    struct = (
+        np.ones((3, 3), dtype=bool)
+        if np_img.ndim == 2
+        else np.ones((3, 3, 3), dtype=bool)
+    )
 
     # Erode the mask - boundary pixels are those in mask but not in eroded mask
     eroded = ndimage.binary_erosion(mask, structure=struct)
@@ -169,7 +170,7 @@ def _geodesic_raster_scan(
     # Generate neighbor offsets based on dimensionality
     if ndim == 2:
         # 8-connected neighborhood for 2D
-        offsets: List[Tuple[int, ...]] = [
+        offsets: list[tuple[int, ...]] = [
             (-1, -1),
             (-1, 0),
             (-1, 1),
@@ -189,7 +190,7 @@ def _geodesic_raster_scan(
                         offsets.append((di, dj, dk))
 
     # Precompute spatial distances for each offset
-    spatial_dists: List[float] = []
+    spatial_dists: list[float] = []
     for offset in offsets:
         offset_arr = np.array(offset) * spacing[: len(offset)]
         spatial_dists.append(float(np.sqrt(np.sum(offset_arr**2))))
@@ -211,8 +212,8 @@ def _geodesic_raster_scan(
 def _raster_pass(
     dist: NDArray[np.floating],
     img: NDArray[np.floating],
-    offsets: List[Tuple[int, ...]],
-    spatial_dists: List[float],
+    offsets: list[tuple[int, ...]],
+    spatial_dists: list[float],
     lmbda: float,
     *,
     forward: bool,
@@ -235,10 +236,9 @@ def _raster_pass(
     ndim = len(shape)
 
     # Determine iteration order
-    if forward:
-        ranges = [range(s) for s in shape]
-    else:
-        ranges = [range(s - 1, -1, -1) for s in shape]
+    ranges = (
+        [range(s) for s in shape] if forward else [range(s - 1, -1, -1) for s in shape]
+    )
 
     # For 2D
     if ndim == 2:
@@ -262,8 +262,7 @@ def _raster_pass(
                         ) * spatial_dist + lmbda * grad_dist * spatial_dist
                         new_dist = dist[ni, nj] + edge_weight
 
-                        if new_dist < dist[i, j]:
-                            dist[i, j] = new_dist
+                        dist[i, j] = min(dist[i, j], new_dist)
 
     # For 3D
     elif ndim == 3:
@@ -291,8 +290,7 @@ def _raster_pass(
                             ) * spatial_dist + lmbda * grad_dist * spatial_dist
                             new_dist = dist[ni, nj, nk] + edge_weight
 
-                            if new_dist < dist[i, j, k]:
-                                dist[i, j, k] = new_dist
+                            dist[i, j, k] = min(dist[i, j, k], new_dist)
 
     return dist
 

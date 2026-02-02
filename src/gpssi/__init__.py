@@ -8,25 +8,25 @@ Based on the paper:
     quantification." Medical image analysis 34 (2016): 42-51.
 """
 
-from gpssi.covariance import CovarianceRepresentation, FullCovariance, KroneckerCovariance
+from gpssi.covariance import (
+    CovarianceRepresentation,
+    FullCovariance,
+    KroneckerCovariance,
+)
 from gpssi.geodesic import GeodesicMethod, get_geodesic_map
 from gpssi.gpssi import get_covariance, get_sample
 from gpssi.kernel import Kernel, RbfKernel
 
 __all__ = [
-    # Core functions
-    "get_sample",
+    "CovarianceRepresentation",
+    "FullCovariance",
+    "GeodesicMethod",
+    "Kernel",
+    "KroneckerCovariance",
+    "RbfKernel",
     "get_covariance",
     "get_geodesic_map",
-    # Covariance representations
-    "CovarianceRepresentation",
-    "KroneckerCovariance",
-    "FullCovariance",
-    # Kernels
-    "Kernel",
-    "RbfKernel",
-    # Geodesic
-    "GeodesicMethod",
+    "get_sample",
 ]
 
 __version__ = "0.2.0"

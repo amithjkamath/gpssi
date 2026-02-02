@@ -5,10 +5,10 @@ import pytest
 
 from gpssi.geodesic import (
     GeodesicMethod,
-    get_geodesic_map,
     _euclidean_distance,
-    _geodesic_raster_scan,
     _fast_marching_geodesic,
+    _geodesic_raster_scan,
+    get_geodesic_map,
 )
 
 

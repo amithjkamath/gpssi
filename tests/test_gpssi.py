@@ -213,9 +213,6 @@ class TestEndToEndSampling:
             samples_large.append(get_sample(geo_map, cov_large, noise_vec=noise.copy()))
 
         # Compute variance in samples (how much they differ from mean)
-        mean_small = np.mean(samples_small, axis=0)
-        mean_large = np.mean(samples_large, axis=0)
-
         var_small = np.var(samples_small, axis=0).mean()
         var_large = np.var(samples_large, axis=0).mean()
 

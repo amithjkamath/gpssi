@@ -53,7 +53,7 @@ def main() -> None:
 
     # Generate samples
     samples = []
-    for i in range(5):
+    for _i in range(5):
         noise_vec = np.random.randn(np_geo.size)
         sample = gpssi.get_sample(np_geo, cov, noise_vec)
         samples.append(sample)

@@ -137,6 +137,9 @@ class TestKroneckerVsFullEquivalence:
         expected = kron_full @ noise
 
         assert np.allclose(kron_sample, expected, rtol=1e-10)
+        # Full covariance may differ slightly due to numerical ordering;
+        # assert it's close to the Kronecker-based sample with a relaxed tolerance.
+        assert np.allclose(full_sample, kron_sample, rtol=1e-3, atol=1e-5)
 
 
 class TestKroneckerMatrixVectorProduct:

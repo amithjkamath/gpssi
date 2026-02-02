@@ -8,13 +8,12 @@ import pytest
 
 from gpssi import get_covariance, get_geodesic_map, get_sample
 from gpssi.covariance import (
-    KroneckerCovariance,
     FullCovariance,
+    KroneckerCovariance,
     kronecker_matrix_vector_product,
 )
 from gpssi.geodesic import GeodesicMethod
 from gpssi.kernel import RbfKernel
-
 
 # Skip all benchmarks if pytest-benchmark is not available
 pytest.importorskip("pytest_benchmark")
@@ -363,7 +362,6 @@ class TestMemoryBenchmarks:
 
     def test_kronecker_vs_full_memory(self):
         """Compare memory usage of Kronecker vs Full representations."""
-        import sys
 
         kernel = RbfKernel(w0=1.0, w1=5.0, eps=1e-8)
         shape = (50, 50)
